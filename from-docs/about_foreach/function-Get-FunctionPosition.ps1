@@ -1,3 +1,6 @@
+
+# source https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_foreach?view=powershell-5.1
+
 function Get-FunctionPosition {
     [CmdletBinding()]
     [OutputType('FunctionPosition')]
@@ -9,7 +12,7 @@ function Get-FunctionPosition {
         [System.String[]]
         $Path
     )
-  
+
     process {
         try {
             $filesToProcess = if ($_ -is [System.IO.FileSystemInfo]) {
@@ -18,17 +21,15 @@ function Get-FunctionPosition {
             }
             else {
                 Write-Verbose "From parameter, $Path"
-                #$filesToProcess = Get-Item -Path $Path
                 Get-Item -Path $Path
             }
             $parser = [System.Management.Automation.Language.Parser]
             Write-Verbose "lets start the foreach loop on `$filesToProcess with $($filesToProcess.count) as count"
             foreach ($item in $filesToProcess) {
-                #Write-Verbose "in the loop"
+                Write-Verbose "in the loop"
                 Write-Verbose "$item"
                 if ($item.PSIsContainer -or
                     $item.Extension -notin @('.ps1', '.psm1')) {
-                    Write-Verbose "skipping incorrent input"
                     continue
                 }
                 $tokens = $errors = $null
@@ -41,7 +42,6 @@ function Get-FunctionPosition {
                 }
                 :tokenLoop foreach ($token in $tokens) {
                     if ($token.Kind -ne 'Function') {
-                        #Write-Verbose "skipping not a function"
                         continue
                     }
                     $position = $token.Extent.StartLineNumber

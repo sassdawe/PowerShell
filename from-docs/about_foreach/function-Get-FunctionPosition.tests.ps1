@@ -24,18 +24,18 @@ Describe "Main Test of $functionName" -Fixture {
 
         . "$currentFolder\$functionFile"
         It "$functionName should return something" {
-            $result = Invoke-Expression "$functionName $currentFolder\$functionFile"
+            $result = Invoke-Expression "$functionName $currentFolder\$functionFile -Verbose"
             $result.Name | Should -Be $functionName
-            $result.LineNumber | Should -Be 1
+            $result.LineNumber | Should -Be 4
             $result.Path | Should -Be "$currentFolder\$functionFile"
         }
         It "$functionName should return something with multiple inputs" {
             $result = Invoke-Expression "$functionName $currentFolder\$functionFile,$currentFolder\$functionFile"
             $result[0].Name | Should -Be $functionName
-            $result[0].LineNumber | Should -Be 1
+            $result[0].LineNumber | Should -Be 4
             $result[0].Path | Should -Be "$currentFolder\$functionFile"
             $result[1].Name | Should -Be $functionName
-            $result[1].LineNumber | Should -Be 1
+            $result[1].LineNumber | Should -Be 4
             $result[1].Path | Should -Be "$currentFolder\$functionFile"
         }
     }
